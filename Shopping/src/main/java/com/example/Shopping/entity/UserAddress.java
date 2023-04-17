@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @EntityListeners(value = { LibraryEntityListener.class })
-public class Address {
+public class UserAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
@@ -23,6 +23,11 @@ public class Address {
     private String address;
     private Long zonecode;
     private String detailedaddress;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_idx")
+    private User user;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

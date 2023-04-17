@@ -1,6 +1,5 @@
 package com.example.Shopping.service;
 
-import com.example.Shopping.dto.UserDto;
 import com.example.Shopping.entity.User;
 import com.example.Shopping.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +16,11 @@ public class UserService {
     /**
      * 회원 가입
      */
-    public String join(User user) {
+    public Long join(User user) {
         // 같은 이름이 있는 중복 회원X
         validateDuplicateMember(user); //중복 회원 검증
         userRepository.save(user);
-        return user.getId();
+        return user.getIdx();
     }
 
     private void validateDuplicateMember(User user) {
@@ -38,7 +37,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> findOne(String id) {
-        return userRepository.findById(id);
+    public Optional<User> findOne(Long userId) {
+        return userRepository.findById(userId);
     }
 }

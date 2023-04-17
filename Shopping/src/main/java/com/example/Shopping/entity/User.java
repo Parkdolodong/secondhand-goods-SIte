@@ -22,29 +22,34 @@ public class User implements DateListener {
 
     @Column(nullable = false)
     private String id;
-    @Column(nullable = true)
+
+    @Column(nullable = false)
     private String password;
-    @Column(nullable = true)
+
+    @Column(nullable = false)
     private String name;
-    @Column(nullable = true)
+
+    @Column(nullable = false)
     private String email;
 
 
 //    유저 상세 주소
     @ToString.Exclude
-    @OneToOne
-    private Address address;
+    @OneToOne(mappedBy = "user")
+    @Builder.Default
+    private List<UserAddress> address = new ArrayList<>();
 
-    @Column(nullable = true)
+
+    @Column(nullable = false)
     private String phoneNumber;
 
-//    @ToString.Exclude
-//    @OneToMany(mappedBy = "seller")
-//    private List<Item> itemsForSale;
-//
-//    @ToString.Exclude
-//    @OneToMany(mappedBy = "bidder")
-//    private List<Bid> bids;
+    @ToString.Exclude
+    @OneToMany(mappedBy = "seller")
+    private List<Item> itemsForSale;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "bidder")
+    private List<Bid> bids;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
