@@ -2,6 +2,8 @@ package com.example.Shopping.service;
 
 import com.example.Shopping.entity.User;
 import com.example.Shopping.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,10 +23,13 @@ class UserServiceTest {
         user.setId("parkdong");
 
         //when
-        Long saveId = userService.join(user);
+        String saveId = userService.join(user);
 
         //then
         User findUser = userService.findOne(saveId).get();
         assertThat(user.getName()).isEqualTo(findUser.getName());
+
+        System.out.println(saveId);
     }
+
 }
