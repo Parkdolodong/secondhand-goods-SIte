@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -49,7 +50,7 @@ public class UserService {
             entity.setName(dto.getName());
             entity.setEmail(dto.getEmail());
             entity.setPhoneNumber(dto.getPhoneNumber());
-//            entity.setUserAddress(dto.getUserAddress());
+            entity.setUserAddress(dto.getUserAddress());
             user = userRepository.save(entity);
         }
         return entityToDto(user);
@@ -68,6 +69,20 @@ public class UserService {
         return dtoUsers;
     }
 
+
+    /**
+     * 중복되는 아이디 찾는 함수
+     */
+    public String idCheck(String userId) {
+        Optional<User> id = userRepository.findById(userId);
+        if (id.isPresent()) {
+            return null;
+        }
+        else {
+            return "ok";
+        }
+    }
+
     /**
      * User entity에 있는 사용자 정보를 UserDto로 넘겨주는 함수
      */
@@ -78,7 +93,7 @@ public class UserService {
                 .name(user.getName())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
-//                .userAddress(address)
+                .userAddress(address)
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();
@@ -95,7 +110,7 @@ public class UserService {
                 .name(userDto.getName())
                 .email(userDto.getEmail())
                 .phoneNumber(userDto.getPhoneNumber())
-//                .userAddress(address)
+                .userAddress(address)
                 .createdAt(userDto.getCreatedAt())
                 .updatedAt(userDto.getUpdatedAt())
                 .build();

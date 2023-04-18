@@ -26,8 +26,8 @@ public class User implements DateListener {
 
 //    유저 상세 주소
     @ToString.Exclude
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "address", referencedColumnName = "idx")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_address", referencedColumnName = "idx")
     private UserAddress userAddress;
 
     private String phoneNumber;
