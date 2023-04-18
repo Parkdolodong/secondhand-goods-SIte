@@ -19,13 +19,13 @@
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container px-4 px-lg-5">
-        <a class="navbar-brand" href="#!">DCUSHOP</a>
+        <a class="navbar-brand" href="/">DCUSHOP</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
                 class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
@@ -41,11 +41,11 @@
                 </li>
             </ul>
             <form class="d-flex">
-                <button class="btn btn-outline-dark" type="button" onclick="location.href='#' ">
+                <button class="btn btn-outline-dark" type="button" onclick="location.href='/sign-in' ">
                     <i class="bi bi-person-fill me-1"></i>
                     SIGN-IN
                 </button>
-                <button class="btn btn-outline-dark" type="button" onclick="location.href='#' ">
+                <button class="btn btn-outline-dark" type="button" onclick="location.href='/sign-up' ">
                     <!-- <i class="bi bi-person-fill-add me-1"></i> -->
                     <i class="bi bi-person-plus-fill me-1"></i>
                     SIGN-UP
@@ -110,26 +110,26 @@
             </div>
             <!-- 주소 -->
             <div class="form-floating">
-                <input type="text" class="form-control mb-2" id="sample6_postcode" name="sample6_postcode"
+                <input type="text" class="form-control mb-2" id="postcode" name="postcode"
                        placeholder="우편번호">
-                <label for="sample6_postcode">우편번호</label>
+                <label for="postcode">우편번호</label>
             </div>
-            <button class="w-100 btn btn-lg btn-light mb-2" onclick="sample6_execDaumPostcode()" type="button">우편번호 찾기
+            <button class="w-100 btn btn-lg btn-light mb-2" onclick="DaumPostcode()" type="button">우편번호 찾기
             </button>
             <div class="form-floating">
-                <input type="text" class="form-control mb-2" id="sample6_address" name="sample6_address"
+                <input type="text" class="form-control mb-2" id="address" name="address"
                        placeholder="주소">
-                <label for="sample6_address">주소</label>
+                <label for="address">주소</label>
             </div>
             <div class="form-floating">
-                <input type="text" class="form-control mb-2" id="sample6_detailAddress" name="sample6_detailAddress"
+                <input type="text" class="form-control mb-2" id="detailAddress" name="detailAddress"
                        placeholder="상세주소">
-                <label for="sample6_detailAddress">상세주소</label>
+                <label for="detailAddress">상세주소</label>
             </div>
             <div class="form-floating">
-                <input type="text" class="form-control mb-2" id="sample6_extraAddress" name="sample6_extraAddress"
+                <input type="text" class="form-control mb-2" id="extraAddress" name="extraAddress"
                        placeholder="참고항목">
-                <label for="sample6_extraAddress">참고항목</label>
+                <label for="extraAddress">참고항목</label>
             </div>
             </div>
             <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
