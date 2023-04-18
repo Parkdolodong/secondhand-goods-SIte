@@ -6,7 +6,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -20,35 +19,25 @@ public class User implements DateListener {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
 
-    @Column(nullable = false)
     private String id;
-
-    @Column(nullable = false)
     private String password;
-
-    @Column(nullable = false)
     private String name;
-
-    @Column(nullable = false)
     private String email;
-
 
 //    유저 상세 주소
     @ToString.Exclude
-    @OneToOne(mappedBy = "user")
-    @Builder.Default
-    private List<UserAddress> address = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "address", referencedColumnName = "idx")
+    private UserAddress userAddress;
 
-
-    @Column(nullable = false)
     private String phoneNumber;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "user")
     private List<Item> itemsForSale;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "bidder")
+    @OneToMany(mappedBy = "user")
     private List<Bid> bids;
 
     private LocalDateTime createdAt;

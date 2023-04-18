@@ -15,15 +15,18 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @Entity
-@EntityListeners(value = { LibraryEntityListener.class })
-public class UserAddress implements DateListener {
+@EntityListeners(value = {LibraryEntityListener.class})
+public class Admin implements DateListener {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
 
-    private String address;
-    private int zonecode;
-    private String detailedaddress;
+    private String id;
+    private String password;
+    private String name;
+    private String email;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

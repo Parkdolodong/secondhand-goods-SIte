@@ -1,6 +1,5 @@
 $("#id").keyup(function() {
     var id = $(this).val();
-    // 비밀번호 같은지 확인
     if (id == "") {
         $("#id").attr("class", "form-control mb-2");
         $("#id_fail").hide();
@@ -35,17 +34,17 @@ $("#password").keyup(function() {
     var rePwd = $("#repeatpassword").val();
     // 비밀번호 같은지 확인
     if (rePwd == "") {
-        $("#repeatpassword").attr("class", "form-control mb-2");
+        $("#repeatpassword").attr("class", "form-control");
         $("#password_fail").hide();
         $("#password_success").hide();
     }
     else if (rePwd == pwd) {//비밀번호 같다면
-        $("#repeatpassword").attr("class", "form-control mb-2 is-valid");
+        $("#repeatpassword").attr("class", "form-control is-valid");
         $("#password_success").show();
         $("#password_fail").hide();
     } 
     else if (rePwd != pwd){//비밀번호 다르다면
-        $("#repeatpassword").attr("class", "form-control mb-2 is-invalid");
+        $("#repeatpassword").attr("class", "form-control is-invalid");
         $("#password_success").hide();
         $("#password_fail").show();
     }
@@ -56,17 +55,17 @@ $("#repeatpassword").keyup(function() {
     var pwd = $("#password").val();
     // 비밀번호 같은지 확인
     if (rePwd == "") {
-        $("#repeatpassword").attr("class", "form-control mb-2");
+        $("#repeatpassword").attr("class", "form-control");
         $("#password_fail").hide();
         $("#password_success").hide();
     }
     else if (rePwd == pwd) {//비밀번호 같다면
-        $("#repeatpassword").attr("class", "form-control mb-2 is-valid");
+        $("#repeatpassword").attr("class", "form-control is-valid");
         $("#password_success").show();
         $("#password_fail").hide();
     } 
     else if (rePwd != pwd){//비밀번호 다르다면
-        $("#repeatpassword").attr("class", "form-control mb-2 is-invalid");
+        $("#repeatpassword").attr("class", "form-control is-invalid");
         $("#password_success").hide();
         $("#password_fail").show();
     }
