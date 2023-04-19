@@ -1,32 +1,34 @@
-$("#id").keyup(function() {
-    var id = $(this).val();
-    if (id == "") {
-        $("#id").attr("class", "form-control mb-2");
+$("#id").keyup(function () {
+  var id = $(this).val();
+  if (id == "") {
+    $("#id").attr("class", "form-control mb-2");
+    $("#id_fail").hide();
+    $("#id_success").hide();
+  }
+  $.ajax({
+    type: "post",
+    url: "/sign/id_check",
+    data: { userId: $("#id").val() },
+    dataType: "json",
+    success: function (res) {
+      if (res.message === "사용 가능한 아이디입니다.") {
+        $("#id").attr("class", "form-control mb-2 is-valid");
+        $("#id_success").show();
         $("#id_fail").hide();
+        console.log(res.message);
+      } else {
+        $("#id").attr("class", "form-control mb-2 is-invalid");
         $("#id_success").hide();
-    }
-    $.ajax({
-        type: "post",
-        url: "/sign/id_check",
-        data: JSON.stringify($("#id").val()),
-        contentType: "application/json",
-        dataType: "json",
-        success: function(res) {
-            console.log("요청성공", res);
-            if (res == "ok") {
-                $("#id").attr("class", "form-control mb-2 is-invalid");
-                $("#id_success").hide();
-                $("#id_fail").show();
-            } else {
-                $("#id").attr("class", "form-control mb-2 is-valid");
-                $("#id_success").show();
-                $("#id_fail").hide();
-            }
-        },
-        error: function(err) {
-            console.log("에러발생", err);
-        }
-    });
+        $("#id_fail").show();
+        console.log(res.message);
+      }
+    },
+    error: function (request, status, error) {
+      console.log("code: " + request.status);
+      console.log("message: " + request.responseText);
+      console.log("error: " + error);
+    },
+  });
 });
 
 $("#password").keyup(function() {
@@ -108,52 +110,34 @@ $("#phonenumber").keyup(function() {
 });
 
 $("#signupbutton").click(function() {
-    let user = {
-        id: $("#id").val(),
-        password: $("#password").val(),
-        name: $("#name").val(),
-        email: $("#email").val(),
-        phoneNumber: $("#phonenumber").val()
+    var userDto = {
+        "id": $("#id").val(),
+        "password": $("#password").val(),
+        "name": $("#name").val(),
+        "email": $("#email").val(),
+        "phoneNumber": $("#phonenumber").val(),
+        "userAddressDto": {
+            "address": $("#address").val(),
+            "zonecode": $("#postcode").val(),
+            "detailedaddress": $("#detailAddress").val()
+        }
     };
-
-    let userAddr = {
-        address: $("#address").val(),
-        zonecode: $("#postcode").val(),
-        detailedaddress: $("#detailAddress").val()
-    }
-
-     console.log(user);
-     console.log(userAddr);
-
     $.ajax({
+        url: "/sign/register",
         type: "POST",
-        url: "/sign/signupaddr",
-        data: JSON.stringify(userAddr),
         contentType: "application/json",
-        dataType: "json",
-        success: function(res) {
-            console.log("요청성공", res);
+        data: JSON.stringify(userDto),
+        success: function(response) {
+            console.log("요청성공");
+            window.location.href = "/sign/sign-in";
+            alert("회원가입이 완료되었습니다.");
+            $('form :input').val('');
         },
-        error: function(err) {
-            console.log("에러발생", err);
+        error: function(xhr, textStatus, errorThrown) {
+            console.log("에러발생", errorThrown);
+            alert(xhr.responseText);
         }
     });
-
-    $.ajax({
-            type: "POST",
-            url: "/sign/signup",
-            data: JSON.stringify(user),
-            contentType: "application/json",
-            dataType: "json",
-            success: function(res) {
-                alert("회원가입이 완료되었습니다.");
-                console.log("요청성공", res);
-            },
-            error: function(err) {
-                alert("회원가입이 실패하였습니다.");
-                console.log("에러발생", err);
-            }
-     });
 });
 
 function DaumPostcode() {
