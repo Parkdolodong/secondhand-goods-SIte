@@ -1,0 +1,17 @@
+package com.example.Shopping.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Builder
+public class LoginDto {
+    private String result;
+
+    private String id;
+    private String password;
+}

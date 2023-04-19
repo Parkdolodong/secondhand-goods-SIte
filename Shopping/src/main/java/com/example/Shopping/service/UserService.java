@@ -1,5 +1,6 @@
 package com.example.Shopping.service;
 
+import com.example.Shopping.dto.LoginDto;
 import com.example.Shopping.dto.UserAddressDto;
 import com.example.Shopping.dto.UserDto;
 import com.example.Shopping.entity.UserAddress;
@@ -7,8 +8,10 @@ import com.example.Shopping.entity.User;
 import com.example.Shopping.repository.UserAddressRepository;
 import com.example.Shopping.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,18 +25,27 @@ public class UserService {
     /**
      * 회원 가입
      */
-
-    public UserDto signInUser(UserDto dto) {
-        // 아이디 중복 검사
+    public UserDto signUser(UserDto dto) throws DuplicateKeyException {
+        // 아이디와 이메일이 이미 존재하는지 확인
         if(userRepository.existsById(dto.getId())) {
-            throw new RuntimeException("중복된 아이디입니다.");
+            throw new DuplicateKeyException("아이디가 이미 존재합니다.");
         }
-        // 이메일 중복 검사
         if(userRepository.existsByEmail(dto.getEmail())) {
-            throw new RuntimeException("중복된 이메일입니다.");
+            throw new DuplicateKeyException("이메일이 이미 존재합니다.");
         }
-        // 회원 정보 저장
-        User user = userRepository.save(dtoToEntity(dto));
+        if(userRepository.existsByPhoneNumber(dto.getPhoneNumber())) {
+            throw new DuplicateKeyException("이미 사용 중인 전화번호입니다");
+        }
+        // UserAddress 객체 생성 및 저장
+        UserAddressDto userAddressDto = dto.getUserAddressDto();
+        UserAddress userAddress = userAddressDtoToEntity(userAddressDto);
+        userAddress = userAddressRepository.save(userAddress);
+
+        // User 객체 생성 및 저장
+        User user = dtoToEntity(dto, userAddress);
+        user = userRepository.save(user);
+
+        // 저장된 User 객체를 DTO로 변환하여 반환
         return entityToDto(user);
     }
 
@@ -42,7 +54,11 @@ public class UserService {
      */
     public UserDto registerUser(UserDto dto) {
         User user = null;
-        if(dto.getIdx() == null) user = userRepository.save(dtoToEntity(dto));
+        if(dto.getIdx() == null) {
+            UserAddressDto userAddressDto = dto.getUserAddressDto();
+            UserAddress userAddress = userAddressRepository.save(userAddressDtoToEntity(userAddressDto));
+            user = userRepository.save(dtoToEntity(dto, userAddress));
+        }
         else{
             var entity = userRepository.findByIdx(dto.getIdx()).get();
             entity.setId(dto.getId());
@@ -50,70 +66,98 @@ public class UserService {
             entity.setName(dto.getName());
             entity.setEmail(dto.getEmail());
             entity.setPhoneNumber(dto.getPhoneNumber());
-            entity.setUserAddress(dto.getUserAddress());
+            UserAddressDto userAddressDto = dto.getUserAddressDto();
+            UserAddress userAddress = userAddressRepository.save(userAddressDtoToEntity(userAddressDto));
+            entity.setUserAddress(userAddress);
             user = userRepository.save(entity);
         }
         return entityToDto(user);
     }
 
     /**
-     * 사용자 조회 함수
+     *  로그인 함수
      */
-    public List<UserDto> finalAllUser() {
-        var users = userRepository.findAll();
-        List<UserDto> dtoUsers = new ArrayList<>();
-        users.forEach(u->{
-            dtoUsers.add(entityToDto(u));
-        });
+//    public UserDto findByLoginInfo(LoginDto loginDto) {
+//        Optional<User> user = userRepository.findByIdAndPassword(loginDto.getId(), loginDto.getPassword());
+//        System.out.println("---------------------------------------");
+//        System.out.println(user);
+//        System.out.println(loginDto.getId());
+//        System.out.println(loginDto.getPassword());
+//        System.out.println("---------------------------------------");
+//        if(user.isPresent()) {
+//            return entityToDto(userRepository.findByIdAndPassword(loginDto.getId(), loginDto.getPassword()).get());
+//        }
+//        return null;
+//    }
 
-        return dtoUsers;
+    public UserDto findByLoginInfo(LoginDto loginDto) {
+        Optional<User> user = userRepository.findByIdAndPassword(loginDto.getId(), loginDto.getPassword());
+        return user.map(this::entityToDto).orElse(null);
     }
-
 
     /**
      * 중복되는 아이디 찾는 함수
      */
-    public String idCheck(String userId) {
-        Optional<User> id = userRepository.findById(userId);
-        if (id.isPresent()) {
-            return null;
-        }
-        else {
-            return "ok";
-        }
+    public boolean isIdExists(String userId) {
+        Optional<User> user = userRepository.findById(userId);
+        return user.isPresent();
+    }
+
+    /**
+     * UserDto에 있는 사용자 정보를 User entity로 넘겨주는 함수
+     */
+    private User dtoToEntity(UserDto dto, UserAddress userAddress) {
+        return User.builder()
+                .id(dto.getId())
+                .password(dto.getPassword())
+                .name(dto.getName())
+                .email(dto.getEmail())
+                .phoneNumber(dto.getPhoneNumber())
+                .userAddress(userAddress)
+                .build();
     }
 
     /**
      * User entity에 있는 사용자 정보를 UserDto로 넘겨주는 함수
      */
     private UserDto entityToDto(User user) {
-        var address = userAddressRepository.findByIdx(user.getIdx()).get();
-        var dto = UserDto.builder().id(user.getId())
+        UserAddressDto userAddressDto = userAddressEntityToDto(user.getUserAddress());
+        return UserDto.builder()
+                .idx(user.getIdx())
+                .id(user.getId())
                 .password(user.getPassword())
                 .name(user.getName())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
-                .userAddress(address)
+                .userAddressDto(userAddressDto)
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();
-        return dto;
     }
 
     /**
-     *  UserDto에 있는 사용자 정보를 User entity로 넘겨주는 함수
+     * UserAddressDto에 있는 사용자 주소 정보를 UserAddress entity로 넘겨주는 함수
      */
-    private User dtoToEntity(UserDto userDto) {
-        var address = userAddressRepository.findByIdx(userDto.getIdx()).get();
-        var dto = User.builder().id(userDto.getId())
-                .password(userDto.getPassword())
-                .name(userDto.getName())
-                .email(userDto.getEmail())
-                .phoneNumber(userDto.getPhoneNumber())
-                .userAddress(address)
-                .createdAt(userDto.getCreatedAt())
-                .updatedAt(userDto.getUpdatedAt())
+    private UserAddress userAddressDtoToEntity(UserAddressDto userAddressDto) {
+        return UserAddress.builder()
+                .address(userAddressDto.getAddress())
+                .zonecode(userAddressDto.getZonecode())
+                .detailedaddress(userAddressDto.getDetailedaddress())
                 .build();
-        return dto;
     }
+
+    /**
+     * UserAddress entity에 있는 사용자 주소 정보를 UserAddressDto로 넘겨주는 함수
+     */
+    private UserAddressDto userAddressEntityToDto(UserAddress userAddress) {
+        return UserAddressDto.builder()
+                .idx(userAddress.getIdx())
+                .address(userAddress.getAddress())
+                .zonecode(userAddress.getZonecode())
+                .detailedaddress(userAddress.getDetailedaddress())
+                .createdAt(userAddress.getCreatedAt())
+                .updatedAt(userAddress.getUpdatedAt())
+                .build();
+    }
+
 }

@@ -21,7 +21,7 @@ public class UserDto {
     private String name;
     private String email;
     private String phoneNumber;
-    private UserAddress userAddress;
+    private UserAddressDto userAddressDto;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
