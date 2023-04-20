@@ -105,8 +105,11 @@ $("#phonenumber").keyup(function() {
         $("#phonenumber").attr("class", "form-control mb-2 is-invalid");
         $("#number_fail").show();
     }
+
+    
 });
 
+    
 function DaumPostcode() {
     new daum.Postcode({
         oncomplete: function(data) {

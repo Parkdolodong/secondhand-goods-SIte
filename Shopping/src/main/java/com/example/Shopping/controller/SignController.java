@@ -59,11 +59,14 @@ public class SignController {
         UserDto userDto = userService.findByLoginInfo(loginDto);
         if (userDto != null) {
             session.setAttribute("user", userDto);
-            System.out.println("---------------------------------------");
-            System.out.println(session);
-            System.out.println(userDto);
-            System.out.println(loginDto);
-            System.out.println("---------------------------------------");
+//            System.out.println("---------------------------------------");
+//            System.out.println(session);
+//            System.out.println(userDto);
+//            System.out.println(loginDto);
+//            System.out.println("---------------------------------------");
+            log.info("session log = {}" + session);
+            log.info("userDto log = {}" + userDto);
+            log.info("loginDto log = {}" + loginDto);
             return ResponseEntity.ok(userDto);
         } else {
             return ResponseEntity.badRequest().body("아이디 또는 비밀번호가 일치하지 않습니다.");
@@ -72,12 +75,12 @@ public class SignController {
     /**
      * 로그아웃
      */
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
+    @ResponseBody
+    @PostMapping("/logout")
+    public void logout(HttpSession session) {
+        log.info("로그아웃 호출");
         session.invalidate();
-        return "redirect:/";
     }
-
 
     /**
     * 실시간 아이디 체크

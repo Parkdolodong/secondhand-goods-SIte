@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  document.getElementById("id").focus();
   $("form").submit(function (event) {
     // 서버로 전송할 데이터를 객체 형태로 생성합니다.
     event.preventDefault();
@@ -6,8 +7,6 @@ $(document).ready(function () {
       id: $("#id").val(),
       password: $("#password").val(),
     };
-
-    console.log(data);
     // 서버로 ajax 요청을 보냅니다.
     $.ajax({
       url: "/sign/login",
@@ -16,7 +15,6 @@ $(document).ready(function () {
       data: JSON.stringify(data),
       dataType: "json",
       success: function (response) {
-        console.log(response);
         window.location.href = "/";
         console.log("성공");
       },
