@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,26 +17,21 @@ import java.util.List;
 @Builder
 @Entity
 @EntityListeners(value = {LibraryEntityListener.class})
-public class Item implements DateListener {
-
+public class Biding implements DateListener  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    private User seller;
 
-    private String name;
-    private String information;
-    private LocalDateTime enddate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User buyer;
 
-    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Image> itemImages = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY)
+    private Item item;
 
-    private int minbidPrice;
-
-    private String category;
+    private int price;
 
     @Enumerated(EnumType.STRING)
     private Status status;

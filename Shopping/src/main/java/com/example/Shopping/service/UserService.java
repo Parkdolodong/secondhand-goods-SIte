@@ -10,10 +10,8 @@ import com.example.Shopping.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -25,6 +23,7 @@ public class UserService {
     /**
      * 회원 가입
      */
+    @Transactional
     public UserDto signUser(UserDto dto) throws DuplicateKeyException {
         // 아이디와 이메일이 이미 존재하는지 확인
         if(userRepository.existsById(dto.getId())) {
@@ -77,18 +76,6 @@ public class UserService {
     /**
      *  로그인 함수
      */
-//    public UserDto findByLoginInfo(LoginDto loginDto) {
-//        Optional<User> user = userRepository.findByIdAndPassword(loginDto.getId(), loginDto.getPassword());
-//        System.out.println("---------------------------------------");
-//        System.out.println(user);
-//        System.out.println(loginDto.getId());
-//        System.out.println(loginDto.getPassword());
-//        System.out.println("---------------------------------------");
-//        if(user.isPresent()) {
-//            return entityToDto(userRepository.findByIdAndPassword(loginDto.getId(), loginDto.getPassword()).get());
-//        }
-//        return null;
-//    }
 
     public UserDto findByLoginInfo(LoginDto loginDto) {
         Optional<User> user = userRepository.findByIdAndPassword(loginDto.getId(), loginDto.getPassword());

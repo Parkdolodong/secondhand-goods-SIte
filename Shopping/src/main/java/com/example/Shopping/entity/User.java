@@ -34,7 +34,7 @@ public class User implements DateListener {
 
     @ToString.Exclude
     @OneToMany(mappedBy = "user")
-    private List<Item> itemsForSale;
+    private List<Item> items;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "user")

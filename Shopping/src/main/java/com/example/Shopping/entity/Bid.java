@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,10 +30,16 @@ public class Bid implements DateListener {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private Long price;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id")
+    private Item item;
+
+
+    private int bid_price;
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
