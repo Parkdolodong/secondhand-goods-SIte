@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $('#endtime').timepicker({
-        timeFormat: 'HH:mm',
+        timeFormat: 'HH:mm:mm',
         interval: 60,
         startTime: '00:00',
         dynamic: false,
@@ -28,4 +28,35 @@ function previewImage(event) {
     } else {
       preview.src = "";
     }
-  }
+}
+
+$("#registration").click(function() {
+    var userDto = {
+        "name": $("#name").val(),
+        "category": $("#category").val(),
+        "name": $("#name").val(),
+        "email": $("#email").val(),
+        "phoneNumber": $("#phonenumber").val(),
+        "userAddressDto": {
+            "address": $("#address").val(),
+            "zonecode": $("#postcode").val(),
+            "detailedaddress": $("#detailAddress").val()
+        }
+    };
+    $.ajax({
+        url: "/item/register",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(userDto),
+        success: function(response) {
+            console.log("요청성공");
+//            window.location.href = "/sign/sign-in";
+            alert("물품등록이 완료되었습니다.");
+            $('form :input').val('');
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            console.log("에러발생", errorThrown);
+            alert(xhr.responseText);
+        }
+    });
+});

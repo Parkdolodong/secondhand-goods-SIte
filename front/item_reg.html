@@ -60,20 +60,21 @@
     <!-- Product section-->
     <section class="py-5">
         <div class="container px-4 px-lg-5 my-5">
-            <h1 class="h3 mb-3 fw-normal">물품 등록</h1><br/>
+            <h1 class="h3 mb-3 fw-normal">물품 등록</h1><br />
             <div class="row gx-4 gx-lg-5 align-items-center">
                 <div class="col-md-6">
-                  <img id="image" class="card-img-top mb-5 mb-md-0" src="" />
+                    <img id="image" class="card-img-top mb-5 mb-md-0" src="" />
                 </div>
                 <div class="col-md-6">
-                  <main class="form-signin w-100 m-auto">
-                    <form action="/sign/register" method="post">
-                      <!-- 물품 이미지 -->
-                      <div class="form-floating">
-                        <div class="mb-3">
-                          <label for="formFile" class="form-label">물품 이미지를 선택해주세요</label>
-                          <input class="form-control mb-2" type="file" id="formimage" accept="image/jpeg,image/png" onchange="previewImage(event)">
-                        </div>
+                    <main class="form-signin w-100 m-auto">
+                        <form action="/sign/register" method="post">
+                            <!-- 물품 이미지 -->
+                            <div class="form-floating">
+                                <div class="mb-3">
+                                    <label for="formFile" class="form-label">물품 이미지를 선택해주세요</label>
+                                    <input class="form-control mb-2" type="file" id="formimage"
+                                        accept="image/jpeg,image/png" onchange="previewImage(event)">
+                                </div>
                             </div>
                             <!-- 물품 이름 -->
                             <div class="form-floating">
@@ -82,23 +83,44 @@
                             </div>
                             <!-- 경매 종료 시간 -->
                             <div class="form-floating">
-                                <input type="date" class="form-control mb-2" id="end-date" name="end-date" placeholder="경매 종료 날짜" min = "2023-04-21">
+                                <input type="date" class="form-control mb-2" id="end-date" name="end-date"
+                                    placeholder="경매 종료 날짜" min="">
                                 <label for="end-date">경매 종료 날짜</label>
                             </div>
                             <div class="form-floating">
-                                <input type="time" class="form-control mb-2" id="end-time" name="end-time" placeholder="경매 종료 시간">
+                                <input type="time" class="form-control mb-2" id="end-time" name="end-time"
+                                    placeholder="경매 종료 시간">
                                 <label for="end-time">종료 시간</label>
+                            </div>
+                            <!-- 카테고리 -->
+                            <div class="form-floating">
+                                <select class="form-select mb-2" aria-label="Default select example" id="category">
+                                    <option value="기타">기타</option>
+                                    <option value="의류">의류</option>
+                                    <option value="뷰티잡화">뷰티잡화</option>
+                                    <option value="유아용품">유아용품</option>
+                                    <option value="가구생활">가구생활</option>
+                                    <option value="취미">취미</option>
+                                    <option value="디지털">디지털</option>
+                                    <option value="컴퓨터">컴퓨터</option>
+                                    <option value="스포츠">스포츠</option>
+                                    <option value="자동차">자동차</option>
+                                    <option value="도서">도서</option>
+                                </select>
+                                <label for="category">카테고리를 선택하세요</label>
                             </div>
                             <!-- 물품 설명 -->
                             <div class="form-floating">
-                                <textarea class="form-control mb-2" placeholder="물품 설명" id="description" name="description" style="height: 250px"></textarea>
+                                <textarea class="form-control mb-2" placeholder="물품 설명" id="description"
+                                    name="description" style="height: 250px"></textarea>
                                 <label for="description">물품 설명</label>
                             </div>
                             <!-- 물품 가격 -->
                             <div class="form-floating">
-                                <input type="number" class="form-control mb-2" id="price" name="price" placeholder="물품 가격" step="500">
+                                <input type="number" class="form-control mb-2" id="price" name="price"
+                                    placeholder="물품 가격" step="500">
                                 <label for="price">물품 가격</label>
-                              </div>
+                            </div>
                             <button class="w-100 btn btn-lg btn-primary" id="registration" type="button">등록</button>
                         </form>
                     </main>
